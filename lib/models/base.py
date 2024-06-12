@@ -1,42 +1,37 @@
-from player import Player
-from match import Match
+# base.py
+import sqlite3
 
-Player.drop_table()
-Player.create_table()
+class BaseORM:
+    db_name = "football_management.db"
 
-player1 = Player.create(
-    name="John Doe",
-    position="Forward",
-    age=25,
-    nationality="England"
-)
+    def __init__(self):
+        self.conn = sqlite3.connect(self.db_name)
+        self.cursor = self.conn.cursor()
+        self.create_tables()
 
-player2 = Player.create(
-    name="Alice Smith",
-    position="Midfielder",
-    age=28,
-    nationality="Spain"
-)
+    def create_tables(self):
+        raise NotImplementedError("Subclasses should implement this!")
 
-print(Player.find_by_name("Alice Smith"))
-print(Player.get_all())
+    def commit_and_close(self):
+        self.conn.commit()
+        self.conn.close()
 
-Match.drop_table()
-Match.create_table()
+    def execute_query(self, query, params=()):
+        self.cursor.execute(query, params)
+        return self.cursor
 
-match1 = Match.create(
-    date="2024-06-11",
-    opponent="Manchester United",
-    venue="Old Trafford"
-)
+    def create(self, query, params):
+        self.execute_query(query, params)
+        self.commit_and_close()
 
-match2 = Match.create(
-    date="2024-06-10",
-    opponent="Chelsea",
-    venue="Stamford Bridge"
-)
+    def delete(self, query, params):
+        self.execute_query(query, params)
+        self.commit_and_close()
 
-Match.find_by_date("2024-06-11")
-print(Match.get_all())
+    def find_all(self, query):
+        return self.execute_query(query).fetchall()
+
+    def find_by_id(self, query, params):
+        return self.execute_query(query, params).fetchone()
 
 
