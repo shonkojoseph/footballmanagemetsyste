@@ -25,7 +25,6 @@ class Player(BaseORM):
         find_player_query = "SELECT * FROM players WHERE name = ?"
         cursor.execute(find_player_query, (name,))
         result = cursor.fetchone()
-        conn.close()
         return result
 
     def delete_player(self, player_id):

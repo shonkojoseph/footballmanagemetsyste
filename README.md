@@ -1,4 +1,6 @@
-# Phase 3 CLI+ORM Project Template
+# Football Management CLI
+
+This CLI application allows you to manage football teams and players using a SQLite database. You can add teams, add players to teams, and list all existing teams and players.
 
 ## Learning Goals
 
@@ -22,8 +24,12 @@ Take a look at the directory structure:
 └── lib
     ├── models
     │   ├── __init__.py
-    │   └── model_1.py
+    │   └── _pycache_
     ├── cli.py
+    |── base.py
+    ├── main.py
+    ├── player.py
+    ├── team.py
     ├── debug.py
     └── helpers.py
 ```

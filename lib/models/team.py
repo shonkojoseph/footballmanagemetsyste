@@ -12,8 +12,13 @@ class Team(BaseORM):
         self.execute_query(create_team_table)
 
     def add_team(self, name):
-        create_team_query = "INSERT INTO teams (name) VALUES (?)"
+        create_team_query = "INSERT OR IGNORE INTO teams (name) VALUES (?)"
         self.create(create_team_query, (name,))
+        if self.cursor.rowcount > 0:
+            print("Team added successfully.")
+        else:
+            print(f"Team '{name}' already exists or an error occurred.")
+
 
     @classmethod
     def find_team_by_name(cls, name):
@@ -22,7 +27,6 @@ class Team(BaseORM):
         find_team_query = "SELECT * FROM teams WHERE name = ?"
         cursor.execute(find_team_query, (name,))
         result = cursor.fetchone()
-        conn.close()
         return result
     
     def delete_team(self, team_id):
