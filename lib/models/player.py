@@ -13,7 +13,6 @@ class Player(BaseORM):
         )
         """
         self.execute_query(create_player_table)
-        self.commit_and_close()
 
     def add_player(self, name, position, team_id):
         create_player_query = "INSERT INTO players (name, position, team_id) VALUES (?, ?, ?)"
@@ -44,22 +43,3 @@ class Player(BaseORM):
     def get_players_by_team(self, team_id):
         get_players_by_team_query = "SELECT * FROM players WHERE team_id = ?"
         return self.find_all(get_players_by_team_query)
-
-# Create an instance to create the table
-player_instance = Player()
-player_instance.create_tables()
-player_instance.commit_and_close()
-
-# Populate players table
-players_data = [
-    ("Player 1", "Forward", 1),  # Assuming team_id 1 exists
-    ("Player 2", "Midfielder", 2),  # Assuming team_id 2 exists
-    ("Player 3", "Defender", 3)  # Assuming team_id 3 exists
-]
-
-for name, position, team_id in players_data:
-    player_instance = Player()
-    player_instance.add_player(name, position, team_id)
-    player_instance.commit_and_close()
-
-print("Players table populated")

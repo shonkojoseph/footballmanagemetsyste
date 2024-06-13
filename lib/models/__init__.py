@@ -1,4 +1,4 @@
 import sqlite3
 
-CONN = sqlite3.connect("db/footballmanagement.db")
-CURSOR = CONN.cursor()
+conn = sqlite3.connect("db/footballmanagement.db")
+cursor = conn.cursor()

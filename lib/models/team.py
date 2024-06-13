@@ -36,22 +36,3 @@ class Team(BaseORM):
     def find_team_by_id(self, team_id):
         find_team_query = "SELECT * FROM teams WHERE id = ?"
         return self.find_by_id(find_team_query, (team_id,))
-
-# Create an instance to create the table
-team_instance = Team()
-team_instance.create_tables()
-team_instance.commit_and_close()
-
-# Populate teams table
-teams_data = [
-    "Team A",
-    "Team B",
-    "Team C"
-]
-
-for name in teams_data:
-    team_instance = Team()
-    team_instance.add_team(name)
-    team_instance.commit_and_close()
-
-print("Teams table populated")
