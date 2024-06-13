@@ -1,5 +1,5 @@
-# team.py
 from base import BaseORM
+import sqlite3
 
 class Team(BaseORM):
     def create_tables(self):
@@ -10,12 +10,21 @@ class Team(BaseORM):
         )
         """
         self.execute_query(create_team_table)
-        self.commit_and_close()
 
     def add_team(self, name):
         create_team_query = "INSERT INTO teams (name) VALUES (?)"
         self.create(create_team_query, (name,))
 
+    @classmethod
+    def find_team_by_name(cls, name):
+        conn = sqlite3.connect(cls.db_name)
+        cursor = conn.cursor()
+        find_team_query = "SELECT * FROM teams WHERE name = ?"
+        cursor.execute(find_team_query, (name,))
+        result = cursor.fetchone()
+        conn.close()
+        return result
+    
     def delete_team(self, team_id):
         delete_team_query = "DELETE FROM teams WHERE id = ?"
         self.delete(delete_team_query, (team_id,))
@@ -28,5 +37,21 @@ class Team(BaseORM):
         find_team_query = "SELECT * FROM teams WHERE id = ?"
         return self.find_by_id(find_team_query, (team_id,))
 
+# Create an instance to create the table
+team_instance = Team()
+team_instance.create_tables()
+team_instance.commit_and_close()
 
+# Populate teams table
+teams_data = [
+    "Team A",
+    "Team B",
+    "Team C"
+]
 
+for name in teams_data:
+    team_instance = Team()
+    team_instance.add_team(name)
+    team_instance.commit_and_close()
+
+print("Teams table populated")

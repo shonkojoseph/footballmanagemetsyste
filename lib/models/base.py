@@ -1,4 +1,3 @@
-# base.py
 import sqlite3
 
 class BaseORM:
@@ -33,5 +32,6 @@ class BaseORM:
 
     def find_by_id(self, query, params):
         return self.execute_query(query, params).fetchone()
+
 
 
